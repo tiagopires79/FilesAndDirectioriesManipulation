@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import entities.ItensVendidos;
 import entities.Product;
 
 public class Program {
@@ -22,7 +23,8 @@ public class Program {
 		// Lendo arquivo e instanciando objetos na memória
 		try (BufferedReader br = new BufferedReader(new FileReader(readerPath))){			
 			String[] line;
-			List<Product> products = new ArrayList<>();
+			//List<Product> products = new ArrayList<>();
+			List<ItensVendidos> vendas = new ArrayList<>();
 			String prod = br.readLine();
 			while (prod != null) {
 				line = prod.split(",");
@@ -31,7 +33,8 @@ public class Program {
 				Integer quantity = Integer.parseInt(line[2]);
 				
 				Product product = new Product(name, unitPrice, quantity);
-				products.add(product);
+				vendas.add(new ItensVendidos(product));				
+				//products.add(product);
 				prod = br.readLine();
 			}
 			
@@ -44,11 +47,16 @@ public class Program {
 
 			// criando arquivo e inserindo dados dos objetos "Product"
 			try(BufferedWriter bw = new BufferedWriter(new FileWriter(readerPath.getParent() + "\\out\\summery.csv", true))){
-				for (Product p : products) { 
-						bw.write(p.getName()+ "," + String.format("%.2f",p.totalValue()));
-						System.out.println("Objeto : "+ p + "  =====>>>>>>  Arquivo out.csv: " + p.getName()+ "," + String.format("%.2f",p.totalValue()));
-						bw.newLine(); 
-					} 
+				//for (Product p : products) { 
+					//bw.write(p.getName()+ "," + String.format("%.2f",p.totalValue()));
+					//System.out.println("Objeto : "+ p + "  =====>>>>>>  Arquivo out.csv: " + p.getName()+ "," + String.format("%.2f",p.totalValue()));
+					//bw.newLine(); 
+				//} 
+				for (ItensVendidos item : vendas) { 
+					bw.write(item.getProduct().getName() + "," + String.format("%.2f",item.fullPrice()));
+					System.out.println("Objeto : "+ item.getProduct().toString() + "  =====>>>>>>  Arquivo out.csv: " + item.getProduct().getName() + "," + String.format("%.2f",item.fullPrice()));
+					bw.newLine(); 
+				}
 			} 
 			catch(IOException e){ 
 				System.out.println("I/O Error: " + e.getMessage());
